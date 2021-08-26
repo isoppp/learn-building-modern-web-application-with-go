@@ -3,8 +3,7 @@ package main
 import "fmt"
 
 func main() {
-	fmt.Println("Hello, world!")
-
+	// basics
 	var whatToSay string // declare with zero value
 	var i int            // declare with zero value
 
@@ -16,10 +15,18 @@ func main() {
 	whatWasSaid, otherThing := saySomething()
 	fmt.Println("The function returned", whatWasSaid, otherThing)
 
+	// pointer
 	var pointerTest = "aaa"
 	fmt.Println(pointerTest)
 	changeUsingPointer1(&pointerTest) // &variable is pointer
 	fmt.Println(pointerTest)
+
+	// struct
+	user := User{Name: "foo", Age: 10, phoneNumber: "bar"}
+	fmt.Println(user)
+	fmt.Println(user.Name)
+	fmt.Println(user.Age)
+	fmt.Println(user.phoneNumber)
 }
 
 func saySomething() (string, string) {
@@ -30,4 +37,10 @@ func saySomething() (string, string) {
 func changeUsingPointer1(s *string) {
 	newValue := "Red"
 	*s = newValue
+}
+
+type User struct {
+	Name        string // public field
+	Age         int
+	phoneNumber string // kind of private(only can use in same package, variable, function and other names is almost the same)
 }
