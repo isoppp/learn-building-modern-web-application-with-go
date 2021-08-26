@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+	"sort"
+)
 
 func main() {
 	// basics
@@ -32,6 +36,25 @@ func main() {
 	fmt.Printf("%v, %p\n", user.Name, &user.Name)
 	user.printNameByPointer()
 	user.printName()
+
+	// map
+	myMap := make(map[string]string)
+	fmt.Println(myMap["foo"])
+	myMap["foo"] = "bar"
+	fmt.Println(myMap["foo"])
+
+	// slice
+	var mySlice []string
+	mySlice = append(mySlice, "slice v2")
+	mySlice = append(mySlice, "slice v1")
+	mySlice = append(mySlice, "slice v5")
+	mySlice = append(mySlice, "slice v4")
+	mySlice = append(mySlice, "slice v8")
+	log.Println(mySlice)
+	log.Println(mySlice[2:4]) // index 2 ~ 3, len = 2
+
+	sort.Strings(mySlice)
+	log.Println(mySlice)
 }
 
 func saySomething() (string, string) {
