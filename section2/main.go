@@ -27,6 +27,11 @@ func main() {
 	fmt.Println(user.Name)
 	fmt.Println(user.Age)
 	fmt.Println(user.phoneNumber)
+
+	// receiver
+	fmt.Printf("%v, %p\n", user.Name, &user.Name)
+	user.printNameByPointer()
+	user.printName()
 }
 
 func saySomething() (string, string) {
@@ -43,4 +48,12 @@ type User struct {
 	Name        string // public field
 	Age         int
 	phoneNumber string // kind of private(only can use in same package, variable, function and other names is almost the same)
+}
+
+func (u *User) printNameByPointer() {
+	fmt.Printf("%v, %p\n", u.Name, &u.Name) // referenced to the same memory address
+}
+
+func (u User) printName() {
+	fmt.Printf("%v, %p\n", u.Name, &u.Name) // referenced to the copied u
 }
