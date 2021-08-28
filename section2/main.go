@@ -48,13 +48,23 @@ func main() {
 	mySlice = append(mySlice, "slice v2")
 	mySlice = append(mySlice, "slice v1")
 	mySlice = append(mySlice, "slice v5")
-	mySlice = append(mySlice, "slice v4")
-	mySlice = append(mySlice, "slice v8")
 	log.Println(mySlice)
-	log.Println(mySlice[2:4]) // index 2 ~ 3, len = 2
+	log.Println(mySlice[1:3]) // got by index 1, 2, len = 2
 
 	sort.Strings(mySlice)
 	log.Println(mySlice)
+
+	fmt.Printf("%v, %p\n", mySlice[0], &mySlice[0]) // referenced to the same memory address
+
+	for _, v := range mySlice {
+		// if use v, copied v
+		fmt.Printf("%v, %p\n", v, &v) // referenced to the same memory address
+	}
+
+	for i2 := range mySlice {
+		// if access by using index access the original variable memory address
+		fmt.Printf("%v, %p\n", mySlice[i2], &mySlice[i2]) // referenced to the same memory address
+	}
 }
 
 func saySomething() (string, string) {
