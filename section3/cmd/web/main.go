@@ -5,19 +5,22 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/isoppp/learn-building-modern-web-application-with-go/section3/pkg/handlers"
+	"github.com/isoppp/learn-building-modern-web-application-with-go/section3/pkg/renderer"
+
+	"github.com/isoppp/learn-building-modern-web-application-with-go/section3/pkg/handler"
 )
 
 const port = ":5555"
 
 func main() {
-	handler, err := handlers.NewHandler()
+	tc, err := renderer.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("cannot initialize app")
 		return
 	}
-	http.HandleFunc("/", handler.Home)
-	http.HandleFunc("/about", handler.About)
+	h := handler.NewHandler(tc)
+	http.HandleFunc("/", h.Home)
+	http.HandleFunc("/about", h.About)
 
 	fmt.Printf("Server is running on port %s\n", port)
 	_ = http.ListenAndServe(port, nil)

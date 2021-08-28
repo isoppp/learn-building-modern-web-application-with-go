@@ -1,4 +1,4 @@
-package handlers
+package renderer
 
 import (
 	"fmt"
@@ -8,32 +8,19 @@ import (
 	"path/filepath"
 )
 
-type templateCache map[string]*template.Template
+type TemplateCache map[string]*template.Template
 
-type Handler struct {
-	templateCache
+type Renderer struct {
+	templateCache TemplateCache
 }
 
-func NewHandler() (*Handler, error) {
-	var handler Handler
-	tc, err := createTemplateCache()
-	if err != nil {
-		return &handler, err
-	}
-
-	handler.templateCache = tc
-	return &handler, err
+func NewRenderer(tc TemplateCache) *Renderer {
+	var r Renderer
+	r.templateCache = tc
+	return &r
 }
 
-func (h *Handler) Home(w http.ResponseWriter, r *http.Request) {
-	h.renderTemplate(w, "home.page.tmpl")
-}
-
-func (h *Handler) About(w http.ResponseWriter, r *http.Request) {
-	h.renderTemplate(w, "about.page.tmpl")
-}
-
-func (h *Handler) renderTemplate(w http.ResponseWriter, tmpl string) {
+func (h *Renderer) RenderTemplate(w http.ResponseWriter, tmpl string) {
 	t, ok := h.templateCache[tmpl]
 	if !ok {
 		log.Fatal("Could not get tempalte from cache")
@@ -48,7 +35,7 @@ func (h *Handler) renderTemplate(w http.ResponseWriter, tmpl string) {
 	}
 }
 
-func createTemplateCache() (templateCache, error) {
+func CreateTemplateCache() (TemplateCache, error) {
 	functions := template.FuncMap{}
 	cache := map[string]*template.Template{}
 
