@@ -18,6 +18,10 @@ func init() {
 	session.Cookie.Secure = config.GetConfig().InProduction
 }
 
+func GetSession() *scs.SessionManager {
+	return session
+}
+
 func SessionLoad(next http.Handler) http.Handler {
 	return session.LoadAndSave(next)
 }
