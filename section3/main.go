@@ -5,15 +5,30 @@ import (
 	"net/http"
 )
 
+const port = ":5555"
+
+func Home(w http.ResponseWriter, r *http.Request) {
+	n, err := fmt.Fprintf(w, "Home Page")
+	if err != nil {
+		fmt.Println("Error happens", err)
+	}
+
+	fmt.Printf("Bytes written in Home: %d\n", n)
+}
+
+func About(w http.ResponseWriter, r *http.Request) {
+	n, err := fmt.Fprintf(w, "About Page")
+	if err != nil {
+		fmt.Println("Error happens", err)
+	}
+
+	fmt.Printf("Bytes written in About: %d\n", n)
+}
+
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		n, err := fmt.Fprintf(w, "Hello, world")
-		if err != nil {
-			fmt.Println("Error happens", err)
-		}
+	http.HandleFunc("/", Home)
+	http.HandleFunc("/about", About)
 
-		fmt.Println(fmt.Sprintf("Bytes written: %d", n))
-	})
-
-	_ = http.ListenAndServe(":5555", nil)
+	fmt.Printf("Server is running on port %s", port)
+	_ = http.ListenAndServe(port, nil)
 }
