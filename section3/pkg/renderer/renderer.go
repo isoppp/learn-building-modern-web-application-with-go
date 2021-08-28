@@ -27,7 +27,14 @@ func (h *Renderer) RenderTemplate(w http.ResponseWriter, tmpl string) {
 		return
 	}
 
-	err := t.Execute(w, nil)
+	data := &struct {
+		Static struct {
+			SiteName string
+		}
+	}{
+		Static: struct{ SiteName string }{SiteName: "Example Site Name passed by render"},
+	}
+	err := t.Execute(w, data)
 
 	if err != nil {
 		fmt.Println("Error parsing template : ", err)
