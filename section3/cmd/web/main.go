@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/isoppp/learn-building-modern-web-application-with-go/section3/handlers"
+	"github.com/isoppp/learn-building-modern-web-application-with-go/section3/pkg/handlers"
 )
 
 const port = ":5555"
