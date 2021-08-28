@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/isoppp/learn-building-modern-web-application-with-go/section3/pkg/handlers"
@@ -10,8 +11,13 @@ import (
 const port = ":5555"
 
 func main() {
-	http.HandleFunc("/", handlers.Home)
-	http.HandleFunc("/about", handlers.About)
+	handler, err := handlers.NewHandler()
+	if err != nil {
+		log.Fatal("cannot initialize app")
+		return
+	}
+	http.HandleFunc("/", handler.Home)
+	http.HandleFunc("/about", handler.About)
 
 	fmt.Printf("Server is running on port %s\n", port)
 	_ = http.ListenAndServe(port, nil)
