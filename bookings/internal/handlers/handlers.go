@@ -6,9 +6,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/pkg/config"
-	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/pkg/models"
-	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/pkg/render"
+	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/config"
+	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/models"
+	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/render"
 )
 
 // Repo the repository used by the handlers

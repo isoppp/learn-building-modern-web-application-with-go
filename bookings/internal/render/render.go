@@ -10,8 +10,8 @@ import (
 
 	"github.com/justinas/nosurf"
 
-	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/pkg/config"
-	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/pkg/models"
+	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/config"
+	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/models"
 )
 
 var functions = template.FuncMap{}

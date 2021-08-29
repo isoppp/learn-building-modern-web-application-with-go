@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/pkg/config"
-	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/pkg/handlers"
-	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/pkg/render"
+	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/config"
+	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/handlers"
+	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/render"
 
 	"github.com/alexedwards/scs/v2"
 )
@@ -49,7 +49,7 @@ func main() {
 
 	srv := &http.Server{
 		Addr:    portNumber,
-		Handler: routes(&app),
+		Handler: routes(&app), //nolint:typecheck
 	}
 
 	err = srv.ListenAndServe()
