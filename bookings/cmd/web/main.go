@@ -33,6 +33,7 @@ func main() {
 		Handler: routes(&app), //nolint:typecheck
 	}
 
+	log.Println("server is running", portNumber)
 	err = srv.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)

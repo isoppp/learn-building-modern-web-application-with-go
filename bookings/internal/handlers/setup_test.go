@@ -9,8 +9,6 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/justinas/nosurf"
-
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
@@ -57,7 +55,7 @@ func getRoutes() http.Handler {
 	mux := chi.NewRouter()
 
 	mux.Use(middleware.Recoverer)
-	mux.Use(NoSurf)
+	//mux.Use(NoSurf)
 	mux.Use(SessionLoad)
 
 	mux.Get("/", Repo.Home)
@@ -80,17 +78,17 @@ func getRoutes() http.Handler {
 	return mux
 }
 
-func NoSurf(next http.Handler) http.Handler {
-	csrfHandler := nosurf.New(next)
-
-	csrfHandler.SetBaseCookie(http.Cookie{
-		HttpOnly: true,
-		Path:     "/",
-		Secure:   app.InProduction,
-		SameSite: http.SameSiteLaxMode,
-	})
-	return csrfHandler
-}
+//func NoSurf(next http.Handler) http.Handler {
+//	csrfHandler := nosurf.New(next)
+//
+//	csrfHandler.SetBaseCookie(http.Cookie{
+//		HttpOnly: true,
+//		Path:     "/",
+//		Secure:   app.InProduction,
+//		SameSite: http.SameSiteLaxMode,
+//	})
+//	return csrfHandler
+//}
 
 // SessionLoad loads and saves session data for current request
 func SessionLoad(next http.Handler) http.Handler {
