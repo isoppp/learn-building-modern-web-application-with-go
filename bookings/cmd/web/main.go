@@ -5,7 +5,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
+
+	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/helpers"
 
 	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/models"
 
@@ -47,6 +50,12 @@ func run() error {
 	// change this to true when in production
 	app.InProduction = false
 
+	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	app.InfoLog = infoLog
+
+	errorLog := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	app.ErrorLog = errorLog
+
 	// set up the session
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
@@ -71,5 +80,6 @@ func run() error {
 
 	_ = fmt.Sprintf("Staring application on port %s\n", portNumber)
 
+	helpers.NewHelpers(&app)
 	return nil
 }
