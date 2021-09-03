@@ -6,6 +6,10 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/driver"
+	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/repository"
+	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/repository/dbrepo"
+
 	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/helpers"
 
 	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/forms"
@@ -21,12 +25,14 @@ var Repo *Repository
 // Repository is the repository type
 type Repository struct {
 	App *config.AppConfig
+	DB  repository.DatabaseRepo
 }
 
 // NewRepo creates a new repository
-func NewRepo(a *config.AppConfig) *Repository {
+func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
 		App: a,
+		DB:  dbrepo.NewPostgresRepo(db.SQL, a),
 	}
 }
 

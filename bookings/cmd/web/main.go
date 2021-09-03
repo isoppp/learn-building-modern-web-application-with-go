@@ -8,6 +8,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/driver"
+
 	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/helpers"
 
 	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/models"
@@ -26,10 +28,16 @@ var session *scs.SessionManager
 
 // main is the main function
 func main() {
-	err := run()
+	db, err := run()
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer func() {
+		err = db.SQL.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
 
 	srv := &http.Server{
 		Addr:    portNumber,
@@ -43,7 +51,7 @@ func main() {
 	}
 }
 
-func run() error {
+func run() (*driver.DB, error) {
 	// what am I going to put in the session
 	gob.Register(models.Reservation{})
 
@@ -65,15 +73,24 @@ func run() error {
 
 	app.Session = session
 
+	// connect to database
+	log.Println("connecting to database...")
+	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=bookings user=isoppp password=")
+	if err != nil {
+		log.Fatal("Cannot connect to database! Dying...")
+		return nil, err
+	}
+	log.Println("Connected to database")
+
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
-		return err
+		return db, err
 	}
 
 	app.TemplateCache = tc
 	app.UseCache = false
 
-	repo := handlers.NewRepo(&app)
+	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
 
 	render.NewTemplates(&app)
@@ -81,5 +98,5 @@ func run() error {
 	_ = fmt.Sprintf("Staring application on port %s\n", portNumber)
 
 	helpers.NewHelpers(&app)
-	return nil
+	return db, nil
 }
