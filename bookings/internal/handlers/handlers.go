@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 	"strconv"
@@ -57,12 +58,32 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 
 // Reservation renders the make a reservation page and displays form
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	var emptyReservation models.Reservation
+	res, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
+	if !ok {
+		helpers.ServerError(w, errors.New("cannot get reservation from session"))
+		return
+	}
+	room, err := m.DB.GetRoomByID(res.RoomId)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	res.Room.RoomName = room.RoomName
+
+	sd := res.StartDate.Format("2006-01-02")
+	ed := res.EndDate.Format("2006-01-02")
+	stringMap := make(map[string]string)
+	stringMap["start_date"] = sd
+	stringMap["end_date"] = ed
+
 	data := make(map[string]interface{})
-	data["reservation"] = emptyReservation
+	data["reservation"] = res
+
 	render.Template(w, r, "make-reservation.page.tmpl", &models.TemplateData{
-		Form: forms.New(nil),
-		Data: data,
+		StringMap: stringMap,
+		Form:      forms.New(nil),
+		Data:      data,
 	})
 }
 
@@ -75,6 +96,7 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 
 	sd := r.Form.Get("start_date")
 	ed := r.Form.Get("end_date")
+	m.App.InfoLog.Println(sd, ed)
 
 	layout := "2006-01-02"
 	startDate, err := time.Parse(layout, sd)
