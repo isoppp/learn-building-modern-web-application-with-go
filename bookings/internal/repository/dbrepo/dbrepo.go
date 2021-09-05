@@ -3,9 +3,8 @@ package dbrepo
 import (
 	"database/sql"
 
-	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/repository"
-
 	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/config"
+	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/repository"
 )
 
 type postgresDBRepo struct {
@@ -25,7 +24,7 @@ func NewPostgresRepo(conn *sql.DB, a *config.AppConfig) repository.DatabaseRepo 
 	}
 }
 
-func NewTestRepo(a *config.AppConfig) repository.DatabaseRepo {
+func NewTestingsRepo(a *config.AppConfig) repository.DatabaseRepo {
 	return &testDBRepo{
 		App: a,
 	}

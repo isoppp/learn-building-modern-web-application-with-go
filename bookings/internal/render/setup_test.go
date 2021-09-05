@@ -8,16 +8,16 @@ import (
 	"testing"
 	"time"
 
-	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/models"
-
 	"github.com/alexedwards/scs/v2"
 	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/config"
+	"github.com/isoppp/learn-building-modern-web-application-with-go/bookings/internal/models"
 )
 
 var session *scs.SessionManager
 var testApp config.AppConfig
 
 func TestMain(m *testing.M) {
+
 	// what am I going to put in the session
 	gob.Register(models.Reservation{})
 
@@ -30,14 +30,14 @@ func TestMain(m *testing.M) {
 	errorLog := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 	testApp.ErrorLog = errorLog
 
-	// set up the session
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
 	session.Cookie.Persist = true
 	session.Cookie.SameSite = http.SameSiteLaxMode
-	session.Cookie.Secure = testApp.InProduction
+	session.Cookie.Secure = false
 
 	testApp.Session = session
+
 	app = &testApp
 
 	os.Exit(m.Run())
@@ -50,7 +50,7 @@ func (tw *myWriter) Header() http.Header {
 	return h
 }
 
-func (tw *myWriter) WriteHeader(_ int) {
+func (tw *myWriter) WriteHeader(i int) {
 
 }
 

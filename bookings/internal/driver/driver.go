@@ -9,6 +9,7 @@ import (
 	_ "github.com/jackc/pgx/v4/stdlib"
 )
 
+// DB holds the database connection pool
 type DB struct {
 	SQL *sql.DB
 }
@@ -19,6 +20,7 @@ const maxOpenDbConn = 10
 const maxIdleDbConn = 5
 const maxDbLifetime = 5 * time.Minute
 
+// ConnectSQL creates database pool for Postgres
 func ConnectSQL(dsn string) (*DB, error) {
 	d, err := NewDatabase(dsn)
 	if err != nil {
@@ -26,19 +28,20 @@ func ConnectSQL(dsn string) (*DB, error) {
 	}
 
 	d.SetMaxOpenConns(maxOpenDbConn)
-	d.SetConnMaxIdleTime(maxIdleDbConn)
+	d.SetMaxIdleConns(maxIdleDbConn)
 	d.SetConnMaxLifetime(maxDbLifetime)
 
 	dbConn.SQL = d
-	err = testDb(d)
+
+	err = testDB(d)
 	if err != nil {
 		return nil, err
 	}
-
-	return dbConn, err
+	return dbConn, nil
 }
 
-func testDb(d *sql.DB) error {
+// testDB tries to ping the database
+func testDB(d *sql.DB) error {
 	err := d.Ping()
 	if err != nil {
 		return err
@@ -46,6 +49,7 @@ func testDb(d *sql.DB) error {
 	return nil
 }
 
+// NewDatabase creates a new database for the application
 func NewDatabase(dsn string) (*sql.DB, error) {
 	db, err := sql.Open("pgx", dsn)
 	if err != nil {
